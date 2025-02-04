@@ -11,7 +11,7 @@ pipeline {
         DOCKERHUB_USERNAME = '1pro'
         GITHUB_URL = 'https://github.com/k8s-1pro/kubernetes-anotherclass-sprint2.git'
 
-        // dir 넘버링
+        // dir 넘버링 - sample로 변경해야 함
         CLASS_NUM = '2221'
     }
 
