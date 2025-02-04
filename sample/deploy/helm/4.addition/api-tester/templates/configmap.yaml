@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # note: include는 helpers.tpl에서 가져오는 값
+  # note: helm command입력시 사용한 배포 인스턴스 명이 들어감
+  name: {{ include "api-tester.fullname" . }}-properties
+  labels:
+    {{- include "api-tester.labels" . | nindent 4 }}
+data:
+  # note: values.yaml의 configmap.data.properties 설정정보가 들어감
+  {{- toYaml .Values.configmap.data.properties | nindent 2 }}
