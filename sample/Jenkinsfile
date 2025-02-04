@@ -11,8 +11,8 @@ pipeline {
         DOCKERHUB_USERNAME = '1pro'
         GITHUB_URL = 'https://github.com/k8s-1pro/kubernetes-anotherclass-sprint2.git'
 
-        // dir 넘버링 - sample로 변경해야 함
-        CLASS_NUM = '2221'
+        // 가변 경로
+        CLASS_NUM = 'sample'
     }
 
     stages {
@@ -59,15 +59,20 @@ pipeline {
 
         stage('헬름 템플릿 확인') {
             steps {
-                // K8S 배포
-                sh "helm template api-tester-${CLASS_NUM} ./${CLASS_NUM}/deploy/helm/4.addition/api-tester -n anotherclass-222 --create-namespace"
+                // helm template {배포명} {패키지경로} -n {네임스페이스} : K8S에 배포전에 배포할 yaml 파일들 출력하여 확인하기 위한 명령어
+                sh "helm template api-tester-${CLASS_NUM} ./${CLASS_NUM}/deploy/helm/api-tester -n anotherclass-222 --create-namespace"
             }
         }
 
         stage('헬름 배포') {
             steps {
                 input message: '배포 시작', ok: "Yes"
-                sh "helm upgrade api-tester-${CLASS_NUM} ./${CLASS_NUM}/deploy/helm/4.addition/api-tester -n anotherclass-222 --create-namespace --install"
+                // helm upgrade {배포명} {패키지경로} -n {네임스페이스} :
+                // --create-namespace 옵션 : 해당 helm차트 배포시 해당하는 namespace없으면, namespace 만들고 리소스 생성하게 해주는 옵션
+                // helm install -> kubectl create 와 같음
+                // helm upgrade -> kubectl patch 와 같음
+                // helm upgrade ... --install : helm이 알아서 install할지, upgrade할지 판단하고 적용(kubectl apply) 해줌
+                sh "helm upgrade api-tester-${CLASS_NUM} ./${CLASS_NUM}/deploy/helm/api-tester -n anotherclass-222 --create-namespace --install"
             }
         }
     }
